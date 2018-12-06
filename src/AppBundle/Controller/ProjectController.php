@@ -10,7 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component
 /**
  * Project controller.
  *
- * @Route("project")
+ * @Route("projet")
  */
 class ProjectController extends Controller
 {
@@ -28,6 +28,7 @@ class ProjectController extends Controller
 
         return $this->render('project/index.html.twig', array(
             'projects' => $projects,
+            'status' => 'terminé'
         ));
     }
 
@@ -43,8 +44,9 @@ class ProjectController extends Controller
 
         $projects = $em->getRepository('AppBundle:Project')->findAll();
 
-        return $this->render('projectWaiting/index.html.twig', array(
+        return $this->render('project/index.html.twig', array(
             'projects' => $projects,
+            'status' => 'en cours'
         ));
     }
 
@@ -61,11 +63,13 @@ class ProjectController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $slug = $this->get('app.utils')->generateSlug($project->getName());
             $em = $this->getDoctrine()->getManager();
+            $project->setSlug($slug);
             $em->persist($project);
             $em->flush();
 
-            return $this->redirectToRoute('project_show', array('id' => $project->getId()));
+            return $this->redirectToRoute('project_show', array('slug' => $project->getSlug()));
         }
 
         return $this->render('project/new.html.twig', array(
@@ -77,7 +81,7 @@ class ProjectController extends Controller
     /**
      * Finds and displays a project entity.
      *
-     * @Route("/{id}", name="project_show")
+     * @Route("/{slug}", name="project_show")
      * @Method("GET")
      */
     public function showAction(Project $project)

@@ -1,47 +1,26 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Projects list</h1>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Slug</th>
-                <th>Status</th>
-                <th>File</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for project in projects %}
-            <tr>
-                <td><a href="{{ path('project_show', { 'id': project.id }) }}">{{ project.id }}</a></td>
-                <td>{{ project.name }}</td>
-                <td>{{ project.description }}</td>
-                <td>{{ project.slug }}</td>
-                <td>{{ project.status }}</td>
-                <td>{{ project.file }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('project_show', { 'id': project.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('project_edit', { 'id': project.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <ul>
-        <li>
-            <a href="{{ path('project_new') }}">Create a new project</a>
-        </li>
-    </ul>
+    <div class="container">
+        <h1 class="text-center">Projets {{ status }}</h1>
+        <div class="row">
+            {% for projet in projects %}
+                <div class="col-sm-4">
+                    <div class="card" style="width: 18rem;">
+                        <img class="card-img-top" src="https://via.placeholder.com/100" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ projet.name }}</h5>
+                            <p class="card-text">{{ projet.description }}</p>
+                            <a href="{{ path('project_show',{'slug':projet.slug}) }}" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <ul>
+            <li>
+                <a href="{{ path('project_new') }}">Create a new project</a>
+            </li>
+        </ul>
+    </div>
 {% endblock %}

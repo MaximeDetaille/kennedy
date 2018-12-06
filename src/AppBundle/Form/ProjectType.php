@@ -5,6 +5,7 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class ProjectType extends AbstractType
 {
@@ -13,7 +14,15 @@ class ProjectType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('name')->add('description')->add('slug')->add('status')->add('file',null,["required" => false]);
+        $builder->add('name')
+        ->add('description')
+        ->add('status',ChoiceType::class,array(
+            "choices" => array(
+                "En cours" => "waiting",
+                "Terminé" => "ended"
+            )
+        ))
+        ->add('file',null,["required" => false]);
     }/**
      * {@inheritdoc}
      */
